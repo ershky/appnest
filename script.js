@@ -95,16 +95,46 @@ document.querySelectorAll(".category-item").forEach(btn=>{
     document.getElementById("latest").scrollIntoView({behavior:"smooth"});
   });
 });
+function bindSearch(id) {
+  const searchBox = document.getElementById(id);
 
-function bindSearch(id){
-  const el=document.getElementById(id);
-  el.addEventListener("input",e=>{
-    currentSearch=e.target.value.trim();
-    const other=id==="headerSearch"?"mobileSearch":"headerSearch";
-    document.getElementById(other).value=currentSearch;
+  if (!searchBox) {
+    console.error("Search box not found:", id);
+    return;
+  }
+
+  function runSearch() {
+    currentSearch = searchBox.value.trim();
+
+    const otherId =
+      id === "headerSearch" ? "mobileSearch" : "headerSearch";
+
+    const otherSearchBox = document.getElementById(otherId);
+
+    if (otherSearchBox) {
+      otherSearchBox.value = currentSearch;
+    }
+
     renderApps();
+
+    if (currentSearch !== "") {
+      document
+        .getElementById("latest")
+        .scrollIntoView({ behavior: "smooth" });
+    }
+  }
+
+  searchBox.addEventListener("input", runSearch);
+
+  searchBox.addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      runSearch();
+    }
   });
 }
+
+
 bindSearch("headerSearch");
 bindSearch("mobileSearch");
 
