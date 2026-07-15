@@ -95,6 +95,151 @@ document.querySelectorAll(".category-item").forEach(btn=>{
     document.getElementById("latest").scrollIntoView({behavior:"smooth"});
   });
 });
+
+
+let activeSuggestionIndex = -1;
+
+function createSuggestionBox(searchBox) {
+  const wrapper = searchBox.closest(".desktop-search");
+
+  if (!wrapper) {
+    console.error("Search wrapper not found for:", searchBox.id);
+    return null;
+  }
+
+  wrapper.classList.add("search-with-suggestions");
+
+  const oldBox = wrapper.querySelector(".search-suggestions");
+  if (oldBox) oldBox.remove();
+
+  const suggestionBox = document.createElement("div");
+  suggestionBox.className = "search-suggestions";
+  suggestionBox.setAttribute("role", "listbox");
+  suggestionBox.setAttribute("aria-label", "App suggestions");
+  wrapper.appendChild(suggestionBox);
+
+  return suggestionBox;
+}
+
+function getSuggestions(query) {
+  const cleanQuery = query.trim().toLowerCase();
+
+  if (!cleanQuery) {
+    return apps.slice(0, 5);
+  }
+
+  return apps
+    .filter((app) => {
+      const searchableText =
+        `${app.name} ${app.category} ${app.description}`.toLowerCase();
+
+      return searchableText.includes(cleanQuery);
+    })
+    .sort((first, second) => {
+      const firstStarts = first.name.toLowerCase().startsWith(cleanQuery);
+      const secondStarts = second.name.toLowerCase().startsWith(cleanQuery);
+
+      if (firstStarts !== secondStarts) {
+        return firstStarts ? -1 : 1;
+      }
+
+      return second.rating - first.rating;
+    })
+    .slice(0, 6);
+}
+
+function hideSuggestionBox(suggestionBox) {
+  suggestionBox.classList.remove("show");
+  suggestionBox.innerHTML = "";
+  activeSuggestionIndex = -1;
+}
+
+function selectSuggestedApp(app, sourceInput, suggestionBox) {
+  currentSearch = app.name;
+  currentCategory = "All";
+
+  document.querySelectorAll(".category-item").forEach((button) => {
+    button.classList.toggle("active", button.dataset.category === "All");
+  });
+
+  const headerSearch = document.getElementById("headerSearch");
+  const mobileSearch = document.getElementById("mobileSearch");
+
+  if (headerSearch) headerSearch.value = app.name;
+  if (mobileSearch) mobileSearch.value = app.name;
+
+  hideSuggestionBox(suggestionBox);
+  renderApps();
+
+  document.getElementById("latest").scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+}
+
+function renderSuggestions(searchBox, suggestionBox) {
+  const suggestions = getSuggestions(searchBox.value);
+
+  if (!suggestions.length) {
+    suggestionBox.innerHTML = `
+      <div class="no-suggestion">
+        <span class="suggestion-search-icon">⌕</span>
+        <div>
+          <strong>No app found</strong>
+          <small>Try another app name</small>
+        </div>
+      </div>
+    `;
+    suggestionBox.classList.add("show");
+    activeSuggestionIndex = -1;
+    return;
+  }
+
+  suggestionBox.innerHTML = suggestions
+    .map(
+      (app, index) => `
+        <button
+          type="button"
+          class="suggestion-item"
+          data-suggestion-index="${index}"
+          role="option"
+        >
+          <span class="suggestion-icon">${app.icon || "📱"}</span>
+
+          <span class="suggestion-content">
+            <strong>${app.name}</strong>
+            <small>${app.category} · ★ ${app.rating}</small>
+          </span>
+
+          <span class="official-label">Official</span>
+        </button>
+      `
+    )
+    .join("");
+
+  suggestionBox.classList.add("show");
+  activeSuggestionIndex = -1;
+
+  suggestionBox.querySelectorAll(".suggestion-item").forEach((item, index) => {
+    item.addEventListener("mousedown", (event) => {
+      event.preventDefault();
+      selectSuggestedApp(suggestions[index], searchBox, suggestionBox);
+    });
+  });
+}
+
+function updateActiveSuggestion(suggestionBox) {
+  const items = [...suggestionBox.querySelectorAll(".suggestion-item")];
+
+  items.forEach((item, index) => {
+    item.classList.toggle("active", index === activeSuggestionIndex);
+
+    if (index === activeSuggestionIndex) {
+      item.scrollIntoView({ block: "nearest" });
+    }
+  });
+}
+
 function bindSearch(id) {
   const searchBox = document.getElementById(id);
 
@@ -103,7 +248,11 @@ function bindSearch(id) {
     return;
   }
 
-  function runSearch() {
+  const suggestionBox = createSuggestionBox(searchBox);
+
+  if (!suggestionBox) return;
+
+  function syncSearchInputs() {
     currentSearch = searchBox.value.trim();
 
     const otherId =
@@ -116,24 +265,78 @@ function bindSearch(id) {
     }
 
     renderApps();
-
-    if (currentSearch !== "") {
-      document
-        .getElementById("latest")
-        .scrollIntoView({ behavior: "smooth" });
-    }
   }
 
-  searchBox.addEventListener("input", runSearch);
+  searchBox.addEventListener("focus", () => {
+    renderSuggestions(searchBox, suggestionBox);
+  });
 
-  searchBox.addEventListener("keydown", function (event) {
+  searchBox.addEventListener("input", () => {
+    syncSearchInputs();
+    renderSuggestions(searchBox, suggestionBox);
+  });
+
+  searchBox.addEventListener("keydown", (event) => {
+    const suggestionItems =
+      suggestionBox.querySelectorAll(".suggestion-item");
+
+    if (event.key === "ArrowDown" && suggestionItems.length) {
+      event.preventDefault();
+      activeSuggestionIndex =
+        (activeSuggestionIndex + 1) % suggestionItems.length;
+      updateActiveSuggestion(suggestionBox);
+      return;
+    }
+
+    if (event.key === "ArrowUp" && suggestionItems.length) {
+      event.preventDefault();
+      activeSuggestionIndex =
+        activeSuggestionIndex <= 0
+          ? suggestionItems.length - 1
+          : activeSuggestionIndex - 1;
+      updateActiveSuggestion(suggestionBox);
+      return;
+    }
+
+    if (event.key === "Escape") {
+      hideSuggestionBox(suggestionBox);
+      searchBox.blur();
+      return;
+    }
+
     if (event.key === "Enter") {
       event.preventDefault();
-      runSearch();
+
+      const suggestions = getSuggestions(searchBox.value);
+
+      if (
+        activeSuggestionIndex >= 0 &&
+        suggestions[activeSuggestionIndex]
+      ) {
+        selectSuggestedApp(
+          suggestions[activeSuggestionIndex],
+          searchBox,
+          suggestionBox
+        );
+      } else if (suggestions.length) {
+        selectSuggestedApp(suggestions[0], searchBox, suggestionBox);
+      } else {
+        syncSearchInputs();
+        hideSuggestionBox(suggestionBox);
+
+        document.getElementById("latest").scrollIntoView({
+          behavior: "smooth"
+        });
+      }
+    }
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!searchBox.closest(".desktop-search").contains(event.target)) {
+      hideSuggestionBox(suggestionBox);
     }
   });
 }
-
 
 bindSearch("headerSearch");
 bindSearch("mobileSearch");
