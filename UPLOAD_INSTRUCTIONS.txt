@@ -1,0 +1,21 @@
+APPNEST SEARCH SUGGESTIONS UPDATE
+
+Upload these three files to your GitHub repository and replace the old ones:
+1. index.html
+2. styles.css
+3. script.js
+
+Then:
+- Commit changes
+- Wait 1–3 minutes
+- Open the website
+- Press Ctrl + Shift + R
+
+Features:
+- App icon suggestions
+- App name, category and rating
+- Official badge
+- Arrow Up/Down keyboard navigation
+- Enter to select
+- Escape to close
+- Click suggestion to filter and scroll
