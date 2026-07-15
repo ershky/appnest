@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Discover useful apps and download them safely from official sources." />
+  <meta name="keywords" content="official app download, safe apps, android apps, app directory" />
+  <meta name="author" content="Sachin" />
+
+  <title>AppNest — Safe & Official App Downloads</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- Google AdSense:
+       Approval ke baad apna AdSense script yahan paste karein.
+       Example:
+       <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXX"
+       crossorigin="anonymous"></script>
+  -->
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="#home" aria-label="AppNest home">
+        <span class="brand-mark">A</span>
+        <span>AppNest</span>
+      </a>
+
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu">☰</button>
+
+      <nav class="nav" id="nav">
+        <a href="#home">Home</a>
+        <a href="#apps">Apps</a>
+        <a href="#categories">Categories</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="hero-glow hero-glow-one"></div>
+      <div class="hero-glow hero-glow-two"></div>
+
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <span class="eyebrow">SAFE • LEGAL • OFFICIAL</span>
+          <h1>Discover useful apps without risky APK files.</h1>
+          <p>
+            AppNest helps users learn about apps and sends them only to official
+            stores or developer websites for downloading.
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#apps">Explore Apps</a>
+            <a class="btn btn-secondary" href="#how-it-works">How it works</a>
+          </div>
+
+          <div class="trust-row">
+            <span>✓ Official links</span>
+            <span>✓ No modified APKs</span>
+            <span>✓ Mobile friendly</span>
+          </div>
+        </div>
+
+        <div class="hero-card">
+          <div class="mini-window">
+            <div class="window-bar">
+              <span></span><span></span><span></span>
+            </div>
+            <div class="window-content">
+              <div class="featured-icon">📱</div>
+              <p class="small-label">Featured App</p>
+              <h3>Productivity Toolkit</h3>
+              <p>Organize tasks, notes and reminders from one place.</p>
+              <button class="fake-download">Official Download ↗</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ad-section">
+      <div class="container">
+        <div class="ad-placeholder">
+          <span>Advertisement</span>
+          <strong>Your AdSense ad can appear here</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="apps">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">APP DIRECTORY</span>
+            <h2>Popular apps</h2>
+          </div>
+
+          <div class="search-box">
+            <input id="searchInput" type="search" placeholder="Search apps..." aria-label="Search apps" />
+          </div>
+        </div>
+
+        <div class="filters" id="categories">
+          <button class="filter active" data-category="All">All</button>
+          <button class="filter" data-category="Communication">Communication</button>
+          <button class="filter" data-category="Productivity">Productivity</button>
+          <button class="filter" data-category="Media">Media</button>
+          <button class="filter" data-category="Design">Design</button>
+        </div>
+
+        <div class="app-grid" id="appGrid"></div>
+        <p class="empty-state" id="emptyState">No apps found.</p>
+      </div>
+    </section>
+
+    <section class="section soft-section" id="how-it-works">
+      <div class="container">
+        <div class="section-heading center-heading">
+          <div>
+            <span class="eyebrow">HOW IT WORKS</span>
+            <h2>A safer app discovery model</h2>
+          </div>
+        </div>
+
+        <div class="steps-grid">
+          <article class="step-card">
+            <span>01</span>
+            <h3>Read app details</h3>
+            <p>Users check features, category, developer and useful information.</p>
+          </article>
+          <article class="step-card">
+            <span>02</span>
+            <h3>Click official link</h3>
+            <p>The download button opens Google Play or the developer's website.</p>
+          </article>
+          <article class="step-card">
+            <span>03</span>
+            <h3>Download safely</h3>
+            <p>The user installs the app from the original and trusted source.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="about">
+      <div class="container info-grid">
+        <div>
+          <span class="eyebrow">ABOUT APPNEST</span>
+          <h2>Built for useful content, not copied APK files.</h2>
+        </div>
+        <div>
+          <p>
+            This website does not host modified, cracked or pirated applications.
+            App links should point only to official app stores or developer websites.
+          </p>
+          <p>
+            Before publishing, add original app reviews, screenshots you are allowed
+            to use, privacy pages and your own editorial content.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="ad-section">
+      <div class="container">
+        <div class="ad-placeholder large-ad">
+          <span>Advertisement</span>
+          <strong>Responsive display ad area</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="section contact-section" id="contact">
+      <div class="container contact-card">
+        <div>
+          <span class="eyebrow">CONTACT</span>
+          <h2>Suggest an official app</h2>
+          <p>Only submit apps with an official store or developer download page.</p>
+        </div>
+
+        <form id="contactForm">
+          <div class="form-row">
+            <input type="text" id="name" placeholder="Your name" required />
+            <input type="email" id="email" placeholder="Your email" required />
+          </div>
+          <input type="url" id="appLink" placeholder="Official app link" required />
+          <textarea id="message" rows="5" placeholder="Why should we list this app?" required></textarea>
+          <button class="btn btn-primary" type="submit">Submit suggestion</button>
+          <p class="form-status" id="formStatus"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <a class="brand footer-brand" href="#home">
+          <span class="brand-mark">A</span>
+          <span>AppNest</span>
+        </a>
+        <p>Safe app discovery with official download links.</p>
+      </div>
+
+      <div>
+        <h4>Important pages</h4>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="disclaimer.html">Disclaimer</a>
+        <a href="terms.html">Terms & Conditions</a>
+      </div>
+
+      <div>
+        <h4>Legal note</h4>
+        <p>We do not host cracked, modded or unauthorized APK files.</p>
+      </div>
+    </div>
+
+    <div class="container copyright">
+      © <span id="year"></span> AppNest. All rights reserved.
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
